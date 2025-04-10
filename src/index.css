@@ -1,0 +1,22 @@
+/* Products.css */
+
+.products-container {
+  margin-top: 50px;
+  text-align: center;
+  padding: 30px;
+  background: linear-gradient(to right, #e3f2fd, #bbdefb);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.products-container h2 {
+  font-size: 2rem;
+  color: #0d47a1;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.products-container h2:hover {
+  color: #1976d2;
+  transform: scale(1.05);
+}
