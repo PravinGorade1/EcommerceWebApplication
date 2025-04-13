@@ -1,11 +1,11 @@
-import { useState } from 'react'; // Import useState
-import { logins } from '../API/Auth'; // your backend login API
+import { useState } from 'react';
+import { logins } from '../API/Auth';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [username, setUsername] = useState(''); // State for username
-  const [password, setPassword] = useState(''); // State for password
-  const [error, setError] = useState(''); // State for error messages
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -18,21 +18,37 @@ const Login = () => {
 
     try {
       const response = await logins({ username, password });
-      const role = response.data.trim();
+      const roleData = response.data.trim();
 
-      console.log('Role:', role);
-      setError('');
-      alert('Login successful! Redirecting...');
+      // Check known backend response pattern
+      if (roleData.startsWith('redirect:-')) {
+        setError('');
+        alert('Login successful! Redirecting...');
 
-      // Redirect based on role
-      if (role === 'redirect:/admin/dashboard') {
-        navigate('/admin');
-      } else if (role === 'redirect:/buyer/dashboard') {
-        navigate('/Buyer');
-      } else if (role === 'redirect:/seller/dashboard') {
-        navigate('/Seller');
+        const parts = roleData.split('/');
+        const role = parts[0];        // e.g., redirect:-seller-dashboard
+        const userId = parts[1] || ''; // might be undefined for admin/buyer
+
+        if (userId) {
+          localStorage.setItem('userId', userId); // store userId for logout
+        }
+
+        // Navigate by role
+        if (role === 'redirect:-admin-dashboard') {
+          navigate('/admin');
+        } else if (role === 'redirect:-buyer-dashboard') {
+          navigate('/Buyer');
+        } else if (role === 'redirect:-seller-dashboard') {
+          navigate('/Seller');
+        } else {
+          setError('Unknown user role');
+        }
+      } else if (roleData === 'already logged in') {
+        setError('User already logged in.');
+      } else if (roleData === 'login again') {
+        setError('Invalid login. Please try again.');
       } else {
-        setError('Unknown user role');
+        setError('Login failed. Try again.');
       }
     } catch (err) {
       console.error(err);
@@ -43,10 +59,13 @@ const Login = () => {
   return (
     <div className="container mt-5" style={{ maxWidth: '500px' }}>
       <div className="card shadow bg-light">
-        <div className="card-body" style={{ backgroundColor: '#41729F' }}>
+        <div
+          className="card-body"
+          style={{ background: 'linear-gradient(#D16BA5,#86A8E7,#5FFBF1)' }}
+        >
           <h2 className="text-center mb-4">Login</h2>
 
-          {error && <div className="alert alert-danger">{error}</div>} {/* Display error */}
+          {error && <div className="alert alert-danger">{error}</div>}
 
           <form onSubmit={handleLogin}>
             <div className="mb-3">
@@ -71,7 +90,13 @@ const Login = () => {
               />
             </div>
 
-            <button type="submit" className="btn w-100" style={{ backgroundColor: '#C3E0E5' }}>Login</button>
+            <button
+              type="submit"
+              className="btn w-100"
+              style={{ backgroundColor: '#C3E0E5' }}
+            >
+              Login
+            </button>
           </form>
         </div>
       </div>

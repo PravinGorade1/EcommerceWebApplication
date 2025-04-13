@@ -1,7 +1,16 @@
-// SellerDashboard.js
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SellerDashboard = () => {
+  const navigate = useNavigate();
+
+  const goToCategoryPage = () => {
+    navigate('/Category');
+  };
+   const goToProductsPage = () => {
+     navigate('/products');
+    }
+  
   return (
     <div className="container my-5">
       <div className="text-center mb-4">
@@ -15,7 +24,25 @@ const SellerDashboard = () => {
             <div className="card-body" style={{ backgroundColor: '#f3d19c' }}>
               <h5 className="card-title">My Products</h5>
               <p className="card-text">Add or edit your listed products</p>
-              <button className="btn btn-outline-primary w-100">Manage Products</button>
+              <button className="btn btn-outline-primary w-100"
+              onClick={goToProductsPage}
+              >Manage Products</button>
+            </div>
+          </div>
+        </div>
+
+   {/* Add Category Card */}
+   <div className="col-md-4">
+          <div className="card shadow-sm h-100">
+            <div className="card-body" style={{ backgroundColor: '#f8d7da' }}>
+              <h5 className="card-title">Add Category</h5>
+              <p className="card-text">Click to see category-wise products</p>
+              <button
+                className="btn btn-outline-danger w-100"
+                 onClick={goToCategoryPage}
+              >
+                Go to Category Page
+              </button>
             </div>
           </div>
         </div>

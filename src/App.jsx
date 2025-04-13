@@ -12,6 +12,9 @@ import Footer from './Component/Footer';
 import Admin from './Component/Admin';
 import SellerDashboard from './Component/SellerDashboard';
 import BuyerDashboard from './Component/BuyerDashboard';
+import Category from './Pages/Category';
+import ViewAllUsers from './Adminpages/ViewAllUsers';
+import ViewCategory from './Adminpages/Viewcategory';
 
 const App = () => (
   <Router>
@@ -24,6 +27,11 @@ const App = () => (
       <Route path="/admin" element={<Admin />} />
       <Route path="/Buyer" element={<BuyerDashboard />} />
       <Route path="/Seller" element={<SellerDashboard />} />
+      <Route path="/Category" element={<Category />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/ViewAllUsers" element={<ViewAllUsers />} />
+      <Route path="/Viewcategory" element={<ViewCategory/>} />
+
     </Routes>
     <Footer/>
   </Router>

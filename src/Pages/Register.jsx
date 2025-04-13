@@ -57,7 +57,7 @@ const Register = () => {
   return (
     <div className="container mt-5" style={{ maxWidth: '600px', backgroundColor: '#f8f9fa' }}>
       <div className="card shadow bg-light">
-        <div className="card-body"style={{ backgroundColor: '#5885AF' }}>
+        <div className="card-body"style={{ background:'linear-gradient(#D16BA5,#86A8E7,#5FFBF1)' }}>
           <h2 className="text-center mb-4">Register</h2>
 
           {error && <div className="alert alert-danger">{error}</div>}
@@ -156,7 +156,7 @@ const Register = () => {
               />
             </div>
 
-            <button type="submit" className="btn w-100" style={{ backgroundColor: '#274472' }}>Register</button>
+            <button type="submit" className="btn w-100" style={{ background:'linear-gradient(#D16BA5,#86A8E7,pink)' }}>Register</button>
           </form>
         </div>
       </div>

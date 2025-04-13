@@ -1,12 +1,156 @@
-import React from 'react'
-import '../App.css'
-import '../index.css'
-function Products() {
-  return (
-    <div>
-      <h2>hellow i am products</h2>
-    </div>
-  )
-}
+import React, { useEffect, useState } from 'react';
+import { addProduct } from '../API/Auth';
 
-export default Products
+const Product = () => {
+  const [formData, setFormData] = useState({
+    prodname: '',
+    proddesc: '',
+    price: '',
+    discount: '',
+    quantity: '',
+    categoryname: '',
+  });
+
+  const [sellerId, setSellerId] = useState(null);
+
+  useEffect(() => {
+    const storedId = localStorage.getItem('userId');
+    
+    if (storedId && storedId !== 'null' && storedId !== 'undefined') {
+      setSellerId(storedId);
+      console.log('Seller ID (from localStorage):', storedId);
+    } else {
+      alert('Seller not logged in. Please login first.');
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!sellerId) {
+      alert("Seller ID not loaded. Please wait.");
+      return;
+    }
+
+    try {
+      // Combine form data with sellerId
+      const productData = {
+        ...formData,
+        sellerId: sellerId,
+      };
+
+      await addProduct(productData);
+      alert('Product added successfully!');
+      setFormData({
+        prodname: '',
+        proddesc: '',
+        price: '',
+        discount: '',
+        quantity: '',
+        categoryname: '',
+      });
+    } catch (error) {
+      console.error('Error adding product:', error);
+      alert('Failed to add product');
+    }
+  };
+
+  return (
+    <div className="container mt-4">
+      <h3 className="mb-4 text-center">Add New Product</h3>
+      <form onSubmit={handleSubmit} className="shadow p-4 rounded bg-light">
+        <div className="mb-3">
+          <label className="form-label">Product Name</label>
+          <input
+            type="text"
+            className="form-control"
+            name="prodname"
+            value={formData.prodname}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Product Description</label>
+          <input
+            type="text"
+            className="form-control"
+            name="proddesc"
+            value={formData.proddesc}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Price</label>
+          <input
+            type="number"
+            className="form-control"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Discount (%)</label>
+          <input
+            type="number"
+            className="form-control"
+            name="discount"
+            value={formData.discount}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Quantity</label>
+          <input
+            type="number"
+            className="form-control"
+            name="quantity"
+            value={formData.quantity}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="form-label">Category</label>
+          <select
+            className="form-select"
+            name="categoryname"
+            value={formData.categoryname}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Books">Books</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Mobiles">Mobiles</option>
+            <option value="Laptops">Laptops</option>
+          </select>
+        </div>
+
+        <button type="submit" className="btn btn-primary w-100">
+          Add Product
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default Product;
